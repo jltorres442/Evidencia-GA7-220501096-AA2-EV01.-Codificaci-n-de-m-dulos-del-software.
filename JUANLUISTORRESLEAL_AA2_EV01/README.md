@@ -150,11 +150,3 @@ servlets y la presentación usa EL y JSTL, como recomienda la especificación.
 - Sesión regenerada al iniciar sesión (evita fijación de sesión), cookie `HttpOnly`.
 - Autorización por rol: los clientes solo ven su panel; los módulos de
   administración son del personal interno.
-
-## 8. Cambios respecto al script de la evidencia GA6-AA2-EV03
-
-1. Llaves primarias con `AUTO_INCREMENT`.
-2. Cliente, Vendedor, Logística y Transportista incluyen `numero_identificacion`
-   (único), `telefono` y `contrasena`.
-3. `Transportista.id_envio` admite `NULL` (transportista disponible) con `ON DELETE SET NULL`.
-4. Restricciones `CHECK` para los estados de pedido, envío e incidencia.
