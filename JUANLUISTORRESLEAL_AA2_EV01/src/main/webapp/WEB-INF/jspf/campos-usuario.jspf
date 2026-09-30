@@ -1,0 +1,74 @@
+<%--
+    FRAGMENTO: campos-usuario.jspf
+    Campos comunes a Cliente, Vendedor, Logística y Transportista (clase
+    Usuario): identificación, nombre, correo, teléfono y contraseña.
+    Requiere las variables:
+      - registro : objeto Usuario con los datos a mostrar
+      - esNuevo  : true al crear (contraseña obligatoria), false al editar
+--%>
+<div class="campo ${not empty errores.numeroIdentificacion ? 'campo--error' : ''}">
+    <label for="numeroIdentificacion">Número de identificación <span class="obligatorio">*</span></label>
+    <input type="text" id="numeroIdentificacion" name="numeroIdentificacion" maxlength="20" required
+           inputmode="numeric" autocomplete="off"
+           value="${fn:escapeXml(registro.numeroIdentificacion)}" placeholder="Ej. 1020304050">
+    <jsp:include page="/WEB-INF/jspf/error-campo.jsp">
+        <jsp:param name="campo" value="numeroIdentificacion"/>
+    </jsp:include>
+</div>
+
+<div class="campo ${not empty errores.nombre ? 'campo--error' : ''}">
+    <label for="nombre">Nombre completo <span class="obligatorio">*</span></label>
+    <input type="text" id="nombre" name="nombre" maxlength="100" required autocomplete="name"
+           value="${fn:escapeXml(registro.nombre)}" placeholder="Nombres y apellidos">
+    <jsp:include page="/WEB-INF/jspf/error-campo.jsp">
+        <jsp:param name="campo" value="nombre"/>
+    </jsp:include>
+</div>
+
+<div class="campo ${not empty errores.email ? 'campo--error' : ''}">
+    <label for="email">Correo electrónico <span class="obligatorio">*</span></label>
+    <input type="email" id="email" name="email" maxlength="150" required autocomplete="email"
+           value="${fn:escapeXml(registro.email)}" placeholder="nombre@dominio.com">
+    <jsp:include page="/WEB-INF/jspf/error-campo.jsp">
+        <jsp:param name="campo" value="email"/>
+    </jsp:include>
+</div>
+
+<div class="campo ${not empty errores.telefono ? 'campo--error' : ''}">
+    <label for="telefono">Teléfono <span class="obligatorio">*</span></label>
+    <input type="tel" id="telefono" name="telefono" maxlength="20" required autocomplete="tel"
+           value="${fn:escapeXml(registro.telefono)}" placeholder="Ej. 3104567890">
+    <jsp:include page="/WEB-INF/jspf/error-campo.jsp">
+        <jsp:param name="campo" value="telefono"/>
+    </jsp:include>
+</div>
+
+<div class="campo ${not empty errores.contrasena ? 'campo--error' : ''}">
+    <label for="contrasena">
+        Contraseña <c:if test="${esNuevo}"><span class="obligatorio">*</span></c:if>
+    </label>
+    <div class="contrasena-envoltura">
+        <input type="password" id="contrasena" name="contrasena" maxlength="72" autocomplete="new-password"
+               ${esNuevo ? 'required' : ''} placeholder="••••••••">
+        <button type="button" class="mostrar-contrasena" data-campo="contrasena">MOSTRAR</button>
+    </div>
+    <p class="campo__ayuda">
+        Mínimo 8 caracteres con letras y números.
+        <c:if test="${not esNuevo}">Déjela vacía para conservar la actual.</c:if>
+    </p>
+    <jsp:include page="/WEB-INF/jspf/error-campo.jsp">
+        <jsp:param name="campo" value="contrasena"/>
+    </jsp:include>
+</div>
+
+<div class="campo ${not empty errores.confirmarContrasena ? 'campo--error' : ''}">
+    <label for="confirmarContrasena">Confirmar contraseña</label>
+    <div class="contrasena-envoltura">
+        <input type="password" id="confirmarContrasena" name="confirmarContrasena" maxlength="72"
+               autocomplete="new-password" placeholder="••••••••">
+        <button type="button" class="mostrar-contrasena" data-campo="confirmarContrasena">MOSTRAR</button>
+    </div>
+    <jsp:include page="/WEB-INF/jspf/error-campo.jsp">
+        <jsp:param name="campo" value="confirmarContrasena"/>
+    </jsp:include>
+</div>

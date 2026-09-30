@@ -1,0 +1,108 @@
+<%--
+    FRAGMENTO: cabecera.jspf
+    Se incorpora con la directiva <%@ include file="..." %> (inclusión
+    estática, en tiempo de traducción). Antes de incluirlo, la página debe
+    definir con <c:set>:
+      - tituloPagina : texto de la pestaña y de la barra superior
+      - moduloActivo : clave del menú que se resalta (inicio, clientes, ...)
+    La directiva page (contentType y pageEncoding) la declara la página que
+    incluye este fragmento.
+--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<fmt:setLocale value="es_CO" scope="request"/>
+<c:set var="raiz" value="${pageContext.request.contextPath}"/>
+<c:set var="usuario" value="${sessionScope.usuarioSesion}"/>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><c:out value="${tituloPagina}"/> · Homecenter Envíos</title>
+    <link rel="stylesheet" href="${raiz}/css/estilos.css">
+</head>
+<body>
+<div class="aplicacion">
+
+    <%-- ===================== MENÚ LATERAL ===================== --%>
+    <aside class="menu-lateral" id="menuLateral">
+        <div class="menu-lateral__marca">
+            <div class="logo" aria-hidden="true">HC</div>
+            <div>
+                <strong>HOMECENTER</strong>
+                <span>Envíos · Pedidos</span>
+            </div>
+        </div>
+
+        <nav class="menu-lateral__navegacion" aria-label="Menú principal">
+            <div class="menu-lateral__seccion">General</div>
+            <a class="menu-lateral__enlace ${moduloActivo == 'inicio' ? 'activo' : ''}" href="${raiz}/inicio">
+                <span class="icono">&#8962;</span> Inicio
+            </a>
+
+            <%-- Los módulos de administración solo se muestran al personal interno --%>
+            <c:if test="${usuario.rol.personalInterno}">
+                <div class="menu-lateral__seccion">Operación</div>
+                <a class="menu-lateral__enlace ${moduloActivo == 'pedidos' ? 'activo' : ''}" href="${raiz}/pedidos">
+                    <span class="icono">&#128230;</span> Pedidos
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'facturas' ? 'activo' : ''}" href="${raiz}/facturas">
+                    <span class="icono">&#129534;</span> Facturas
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'envios' ? 'activo' : ''}" href="${raiz}/envios">
+                    <span class="icono">&#128666;</span> Envíos
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'incidencias' ? 'activo' : ''}" href="${raiz}/incidencias">
+                    <span class="icono">&#9888;</span> Incidencias
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'notificaciones' ? 'activo' : ''}" href="${raiz}/notificaciones">
+                    <span class="icono">&#128276;</span> Notificaciones
+                </a>
+
+                <div class="menu-lateral__seccion">Personas</div>
+                <a class="menu-lateral__enlace ${moduloActivo == 'clientes' ? 'activo' : ''}" href="${raiz}/clientes">
+                    <span class="icono">&#128101;</span> Clientes
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'vendedores' ? 'activo' : ''}" href="${raiz}/vendedores">
+                    <span class="icono">&#128188;</span> Vendedores
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'logistica' ? 'activo' : ''}" href="${raiz}/logistica">
+                    <span class="icono">&#127981;</span> Logística
+                </a>
+                <a class="menu-lateral__enlace ${moduloActivo == 'transportistas' ? 'activo' : ''}" href="${raiz}/transportistas">
+                    <span class="icono">&#128667;</span> Transportistas
+                </a>
+            </c:if>
+        </nav>
+
+        <div class="menu-lateral__pie">
+            Sistema de realización y seguimiento de pedidos<br>
+            SENA · ADSO 3186607
+        </div>
+    </aside>
+
+    <%-- ===================== CONTENIDO ===================== --%>
+    <div class="principal">
+        <header class="barra-superior">
+            <h1 class="barra-superior__titulo">
+                <button type="button" class="solo-movil" id="botonMenu" aria-controls="menuLateral"
+                        aria-expanded="false" aria-label="Abrir menú">&#9776;</button>
+                <c:out value="${tituloPagina}"/>
+            </h1>
+            <div class="barra-superior__usuario">
+                <div class="avatar" aria-hidden="true"><c:out value="${usuario.iniciales}"/></div>
+                <div class="datos">
+                    <strong><c:out value="${usuario.nombre}"/></strong>
+                    <small><c:out value="${usuario.rol.etiqueta}"/></small>
+                </div>
+                <form method="post" action="${raiz}/cerrar-sesion">
+                    <input type="hidden" name="tokenCsrf" value="${sessionScope.tokenCsrf}">
+                    <button type="submit" class="boton boton--contorno boton--pequeno">Salir</button>
+                </form>
+            </div>
+        </header>
+
+        <main class="contenido">
+            <%-- Inclusión dinámica (en tiempo de ejecución) de los mensajes de retroalimentación --%>
+            <jsp:include page="/WEB-INF/jspf/mensajes.jsp"/>

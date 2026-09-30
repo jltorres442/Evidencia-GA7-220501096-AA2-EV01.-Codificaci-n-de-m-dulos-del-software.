@@ -1,0 +1,10 @@
+<%--
+    FRAGMENTO: pie.jspf
+    Cierra las etiquetas abiertas por cabecera.jspf y carga el JavaScript.
+--%>
+        </main>
+    </div>
+</div>
+<script src="${raiz}/js/aplicacion.js"></script>
+</body>
+</html>
